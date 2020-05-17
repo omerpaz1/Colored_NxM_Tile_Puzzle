@@ -23,6 +23,13 @@ public class Board {
 		
 	}
 	
+	public Board(Board other_board) {
+		this.N = other_board.N;
+		this.M = other_board.M;
+		this.List_pieces = other_board.List_pieces;
+		this.MatBoard = other_board.MatBoard;
+		
+	}
 	
 	public int getN() {
 		return N;

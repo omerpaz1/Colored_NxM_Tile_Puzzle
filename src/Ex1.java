@@ -11,7 +11,28 @@ public class Ex1
 		File input = new File("src/input.txt"); 
 		ReadFile GameInput = new ReadFile(input);
 		Game myGame = GameInput.CreateGame();
-		myGame.print2D();
+//		myGame.print2D();
+		
+		switch (myGame.algo) {
+		case "BFS":
+			Algoritem BFS = new Algoritem(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());
+			break;
+		case "DFID":
+			Algoritem DFID = new Algoritem(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());
+		break;
+		case "A*":
+			Algoritem AStar = new Algoritem(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());
+		break;
+		case "IDA*":
+			Algoritem IDAStar = new Algoritem(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());
+		break;
+		case "DFBnB":
+			Algoritem DFBnB = new Algoritem(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());
+		break;
+
+		default:
+			break;
+		}
 		
 	}
 }
