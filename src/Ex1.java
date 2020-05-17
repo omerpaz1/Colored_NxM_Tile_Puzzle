@@ -13,9 +13,9 @@ public class Ex1
 		Game myGame = GameInput.CreateGame();
 		myGame.print2D();
 		
-		switch (myGame.algo) {
+		switch (myGame.getAlgo()) {
 		case "BFS":
-			Algoritem BFS = new Algoritem(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());
+			Algoritem BFS = new BFS(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());
 			break;
 		case "DFID":
 			Algoritem DFID = new Algoritem(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());

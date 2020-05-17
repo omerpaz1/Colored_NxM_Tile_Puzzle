@@ -15,14 +15,24 @@ public class Board {
 	private int M; // size of Colums
 	private ArrayList<Piece> List_pieces;
 	private Piece[][] MatBoard;
-
+	private Piece EmptyPiece;
+	
 	public Board() {
 		this.N = 0;
 		this.M = 0;
 		this.List_pieces = new ArrayList<Piece>();
+		this.EmptyPiece = new Piece(-1,"Empty");
 		
 	}
 	
+	public Piece getEmptyPiece() {
+		return EmptyPiece;
+	}
+
+	public void setEmptyPiece(Piece emptyPiece) {
+		EmptyPiece = emptyPiece;
+	}
+
 	public Board(Board other_board) {
 		this.N = other_board.N;
 		this.M = other_board.M;
@@ -81,7 +91,19 @@ public class Board {
 		this.MatBoard = new Piece[N][M];
 		for (int i = 0; i < this.N; i++) {
 			for (int j = 0; j < this.M; j++) {
+				Piece is_empty = this.List_pieces.get(Piece_index);
+				if (is_empty.getNumber_Piece() == -1) {
+					this.setEmptyPiece(is_empty);
+					this.getEmptyPiece().getPlace()[0] = i;
+					this.getEmptyPiece().getPlace()[1] = j;
+
+				}
 				this.MatBoard[i][j] = this.List_pieces.get(Piece_index);
+				int[] spot = new int[2];
+				spot[0] = i;
+				spot[1] = j;
+				this.List_pieces.get(Piece_index).getPlace()[0] =i;
+				this.List_pieces.get(Piece_index).getPlace()[1] =j;
 				Piece_index++;
 			}
 		}

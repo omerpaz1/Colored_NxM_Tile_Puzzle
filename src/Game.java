@@ -15,10 +15,7 @@ public class Game {
 	ArrayList<Piece> myPieces;
 	
 	
-//	
-//	public Game(String algo, boolean time, boolean open, int rows, int colums, int[] black, int[] red ,String[][] mat) {
-//		
-//	}
+
 	public Game() {
 		this.algo = ""; // 1
 		this.time = false;

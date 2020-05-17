@@ -10,16 +10,29 @@ public class Piece {
 	String Color;
 	int Number_Piece;
 	int Price;
+	int[] Place;
 	
 	
 	public Piece(int Number_Piece,String Color) {
 		this.Number_Piece = Number_Piece;
 		this.Color = Color;
+		this.Place = new int[2];
+		
 		if (Color.equals("Green")) {this.Price = 1;}
 		else if (Color.equals("Red")) {this.Price = 30;}
 		else this.Price = 0;
+		
 
 
+	}
+
+
+	public int[] getPlace() {
+		return Place;
+	}
+
+	public void setPlace(int[] place) {
+		this.Place = place;
 	}
 
 
@@ -51,11 +64,15 @@ public class Piece {
 	public void setPrice(int price) {
 		Price = price;
 	}
-
+	
+    public int compareTo(Piece other) {
+        return (this.Number_Piece - other.Number_Piece);
+    }
 
 	@Override
 	public String toString() {
 		return "("+Color+ ","+Number_Piece+")";
 	}
+	
 	
 }
