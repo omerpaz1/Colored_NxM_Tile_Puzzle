@@ -31,8 +31,11 @@ public class Piece {
 		return Place;
 	}
 
-	public void setPlace(int[] place) {
-		this.Place = place;
+	public void setPlace(int i, int j) {
+		int[] newarr = new int[2];
+		newarr[0] = i;
+		newarr[1] = j;
+		this.Place = newarr;
 	}
 
 
@@ -71,7 +74,7 @@ public class Piece {
 
 	@Override
 	public String toString() {
-		return "("+Color+ ","+Number_Piece+")";
+		return "("+Color+ ","+Number_Piece+"["+getPlace()[0]+","+getPlace()[1]+"]"+")";
 	}
 	
 	
