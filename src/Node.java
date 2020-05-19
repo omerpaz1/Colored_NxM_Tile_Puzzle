@@ -12,6 +12,11 @@ class Node {
 		next = null;
 		path = "";
 	}
+	Node(Node n) { 
+		this.data = n.data; 
+		this.next = n.next;
+		this.path = this.path+=n.path;
+	}
 
 	public String getData() {
 		return data;

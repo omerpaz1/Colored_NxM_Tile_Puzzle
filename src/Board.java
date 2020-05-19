@@ -115,7 +115,7 @@ public class Board {
         for (int i = 0; i < N; i++) {
             // Loop through all elements of current row 
             for (int j = 0; j < M; j++) {
-            	System.out.print(this.MatBoard[i][j].toString() +" ");
+            	System.out.print(this.MatBoard[i][j].toString() +" "+this.MatBoard[i][j].getPlace()[0]+","+this.MatBoard[i][j].getPlace()[1]+" ");
             }
         	System.out.println();
         }

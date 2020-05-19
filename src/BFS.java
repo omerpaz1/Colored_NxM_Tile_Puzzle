@@ -8,6 +8,7 @@ public class BFS extends Algoritem{
 		Node start = new Node(S);
 		String G = CreateGoal();
 		Node goal = new Node(G);
+//		System.out.println(goal.getData());
 
 
 		Run_BFS(start,goal);
@@ -23,25 +24,35 @@ public class BFS extends Algoritem{
 			valid_operation = true;
 			Node n = Queue.poll(); // get the front element of the queue.
 			Close_list.put(n, n.getData());
+			
+
+			System.out.println(n.getData());
+			initMatrix(n);
+			System.out.println("****");
+			this.board.printMat();
+			System.out.println("****");
+			System.out.println("emtpyplace ="+this.board.getEmptyPiece().getPlace()[0]+","+this.board.getEmptyPiece().getPlace()[1]);
 
 			while(valid_operation) {
 				int i = 1;
 				while(i != 5) {
-					Node g = Operator(n,i);
+					Node temp = new Node(n);
+					Node g = Operator(temp,i);
 					if(g == null) {
 						i++;
 						continue;
 					}
 					if (!(Open_list.contains(g.getData())) && !(Close_list.contains(g.getData()))){
+
+
 						if(g.getData().equals(Goal.getData())) {
 							return true;
 						}
 						else {
 							Open_list.put(g, g.getData());
+							g.setPath(n.getPath()+g.getPath());
 							Queue.add(g);
-							i=1;
-							System.out.println("****");
-							this.board.printMat();
+							i++;
 						}
 					}
 					else {
@@ -58,4 +69,5 @@ public class BFS extends Algoritem{
 
 
 	}
+
 }

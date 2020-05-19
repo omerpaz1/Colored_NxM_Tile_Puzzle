@@ -1,9 +1,11 @@
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Algoritem {
 
@@ -56,6 +58,39 @@ public class Algoritem {
 	}
 
 
+	public void initMatrix(Node n) {
+		ArrayList<Piece> ans = new ArrayList<>();
+		StringTokenizer multiTokenizer_full = new StringTokenizer(n.getData(),",");
+		while (multiTokenizer_full.hasMoreTokens())
+		{
+			StringTokenizer multiTokenizer = new StringTokenizer(multiTokenizer_full.nextToken(),"_,");
+			while (multiTokenizer.hasMoreTokens()) {
+				String color = multiTokenizer.nextToken();
+				int num = Integer.parseInt(multiTokenizer.nextToken());
+				ans.add(new Piece(num,color));
+			}
+
+		}
+		int size = 0;
+		for (int i = 0; i < this.board.getN(); i++) {
+			for (int j = 0; j < this.board.getM(); j++) {
+				if(ans.get(size).getNumber_Piece() == -1) {
+					this.board.setEmptyPiece(ans.get(i));
+					this.board.getEmptyPiece().setPlace(i, j);
+				}
+				else {
+					ans.get(size).setPlace(i, j);
+					this.board.getMatBoard()[i][j] = ans.get(size);
+				}
+
+				size++;
+			}
+		}
+
+
+	}
+
+
 	/**
 	 * this function will check optional operation with this order: left -> up -> right - > down
 	 * if, not find valid operation, the function will retrun null.
@@ -71,28 +106,37 @@ public class Algoritem {
 			if(Left(i,j,emptyPiece)) {
 				Piece left_piece = this.board.getMatBoard()[i][j-1];
 				swap_pieces(left_piece,emptyPiece);
-				return new_node_state(left_piece,"L");
+				Node ans = new_node_state(left_piece,"L");
+				swap_pieces(left_piece,emptyPiece);
+				return ans;
 			}
 		}
 		else if(index == 2) {
 			if(Up(i,j,emptyPiece)) {
 				Piece up_piece = this.board.getMatBoard()[i-1][j];
 				swap_pieces(up_piece,emptyPiece);
-				return new_node_state(up_piece,"U");
+				Node ans = new_node_state(up_piece,"U");
+				swap_pieces(up_piece,emptyPiece);
+
+				return ans;
 			}
 		}
 		else if(index == 3) {
 			if(Right(i,j,emptyPiece)) {
 				Piece right_piece = this.board.getMatBoard()[i][j+1];
 				swap_pieces(right_piece,emptyPiece);
-				return new_node_state(right_piece,"R");
+				Node ans = new_node_state(right_piece,"R");
+				swap_pieces(right_piece,emptyPiece);
+				return ans;
 			}
 		}
 		else if(index == 4) {
 			if(Down(i,j,emptyPiece)) {
 				Piece down_piece = this.board.getMatBoard()[i+1][j];
 				swap_pieces(down_piece,emptyPiece);
-				return new_node_state(down_piece,"D");
+				Node ans = new_node_state(down_piece,"D");
+				swap_pieces(down_piece,emptyPiece);
+				return ans;
 			}
 		}
 		else if(index == 5) {
@@ -105,6 +149,7 @@ public class Algoritem {
 
 
 	public boolean Left(int i, int j , Piece p){
+		System.out.println(i);
 		if(j-1 >= 0 && !(this.board.getMatBoard()[i][j-1].getColor().equals("Black")))
 			return true;
 		return false;
@@ -144,13 +189,12 @@ public class Algoritem {
 
 		Piece temp = this.board.getMatBoard()[l_i][l_j];
 
-		this.board.getMatBoard()[l_i][l_j].setPlace(e_i, e_j);
 		this.board.getMatBoard()[l_i][l_j] = this.board.getMatBoard()[e_i][e_j];
-
-		this.board.getMatBoard()[e_i][e_j].setPlace(l_i, l_j);
 		this.board.getMatBoard()[e_i][e_j] = temp;
+		this.board.getMatBoard()[l_i][l_j].setPlace(e_i, e_j);
+		this.board.getMatBoard()[e_i][e_j].setPlace(l_i, l_j);
 
-		this.board.getEmptyPiece().setPlace(l_i, l_j);
+		this.board.setEmptyPiece(this.board.getMatBoard()[e_i][e_j]);
 
 
 

@@ -26,7 +26,6 @@ public class Piece {
 
 	}
 
-
 	public int[] getPlace() {
 		return Place;
 	}
@@ -74,7 +73,7 @@ public class Piece {
 
 	@Override
 	public String toString() {
-		return "("+Color+ ","+Number_Piece+"["+getPlace()[0]+","+getPlace()[1]+"]"+")";
+		return Color+"_"+Number_Piece+",";
 	}
 	
 	
