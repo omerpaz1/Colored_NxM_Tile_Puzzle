@@ -20,18 +20,12 @@ public class Algoritem {
 	double seconds;
 
 	// for BDS:
-	Hashtable<Node, String> Close_list;
-	Hashtable<Node, String> Open_list;
-	Queue<Node> Queue;
 
 
 	public Algoritem(Board other_board, boolean time, boolean open) {
 		this.isTime = time;
 		this.isOpen = open;
 		this.board = other_board;
-		this.Close_list = new Hashtable<Node, String>(); 
-		this.Open_list = new Hashtable<Node, String>(); 
-		this.Queue = new LinkedList<Node>();
 		this.Num = 0;
 		this.Cost = 0;
 		long startTime = (long) 0.0;
