@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  * 
@@ -14,6 +15,8 @@ public class Board {
 	private int N; // size of Rows
 	private int M; // size of Colums
 	private ArrayList<Piece> List_pieces;
+	private Hashtable<Integer,Integer> pieces_prices;
+
 	private Piece[][] MatBoard;
 	private Piece EmptyPiece;
 	
@@ -65,8 +68,14 @@ public class Board {
 		return List_pieces;
 	}
 
+	public Hashtable<Integer, Integer> getPieces_prices() {
+		// TODO Auto-generated method stub
+		return pieces_prices;
+	}
 
-
+	public void setPieces_prices(Hashtable<Integer, Integer> pieces_prices) {
+		this.pieces_prices = pieces_prices;
+	}
 
 	public void setList_pieces(ArrayList<Piece> list_pieces) {
 		List_pieces = list_pieces;
@@ -109,17 +118,35 @@ public class Board {
 		}
 	}
 	
+	public int[] findEmptyPiece() {
+		int[] ans = new int[2];
+		
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if (this.MatBoard[i][j].getNumber_Piece() == -1) {
+					ans[0] = i;
+					ans[1] = j;
+					return ans;
+				}
+			}
+		}
+		return ans;
+	}
+	
     public void printMat() 
     { 
         // Loop through all rows 
         for (int i = 0; i < N; i++) {
             // Loop through all elements of current row 
             for (int j = 0; j < M; j++) {
-            	System.out.print(this.MatBoard[i][j].toString() +" "+this.MatBoard[i][j].getPlace()[0]+","+this.MatBoard[i][j].getPlace()[1]+" ");
+            	System.out.print("("+this.MatBoard[i][j].toString()+")");
             }
         	System.out.println();
         }
 
     }
+
+
+
 
 }

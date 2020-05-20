@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.StringTokenizer;
 
 public class ReadFile {
@@ -128,9 +129,11 @@ public class ReadFile {
 			else if(cur_num == -1) {
 				myGame.getMyBorad().getList_pieces().add(new Piece(cur_num,"Empty"));
 
+
 			}
 			else {
 				myGame.getMyBorad().getList_pieces().add(new Piece(cur_num,"Green"));
+
 			}
 
 		}

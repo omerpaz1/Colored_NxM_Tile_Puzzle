@@ -19,9 +19,7 @@ public class Piece {
 		this.Place = new int[2];
 		
 		if (Color.equals("Green")) {this.Price = 1;}
-		else if (Color.equals("Red")) {this.Price = 30;}
-		else this.Price = 0;
-		
+		else if (Color.equals("Red")) {this.Price = 30;}		
 
 
 	}
