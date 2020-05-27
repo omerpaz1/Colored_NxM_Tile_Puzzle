@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 public class Algoritem {
 
 	Boolean isTime;
+	Hashtable<Integer, Piece> GoalHash;
 	Boolean isOpen;
 	Board board;
 	int Num;
@@ -18,6 +19,10 @@ public class Algoritem {
 	long endTime;
 	long totalTime;
 	double seconds;
+	String S;
+	String G;
+	Node start;
+	Node goal;
 
 	// for BDS:
 
@@ -32,15 +37,18 @@ public class Algoritem {
 		long endTime = (long) 0.0;
 		long totalTime = (long)0.0;
 		double seconds = 0;
+		this.GoalHash = new Hashtable<Integer, Piece>(); 
+
+
 		
 	}
 
-	public String CreateState() {
+	public String CreateState(Piece[][] theBoard) {
 		String State = "";
 
-		for (int i = 0; i < this.board.getN(); i++) {
-			for (int j = 0; j < this.board.getM(); j++) {
-				State+=this.board.getMatBoard()[i][j];
+		for (int i = 0; i < theBoard.length; i++) {
+			for (int j = 0; j < theBoard[0].length; j++) {
+				State+=theBoard[i][j];
 			}
 		}
 		return State;
@@ -60,12 +68,46 @@ public class Algoritem {
 		for (int i = 0; i < this.board.getList_pieces().size(); i++) {
 			Goal+=this.board.getList_pieces().get(i);
 		}
+		
+		Node temp = new Node(Goal);
+		Piece[][] goalMat = MyinitMatrix(temp, this.board.getMatBoard());
+		for (int i = 0; i < goalMat.length; i++) {
+			for (int j = 0; j < goalMat[0].length; j++) {
+				GoalHash.put(goalMat[i][j].getNumber_Piece(),goalMat[i][j]);
+			}
+		}
 		return Goal;
 	}
 
 
-	public void initMatrix(Node n) {
+//	public void initMatrix(Node n) {
+//		ArrayList<Piece> ans = new ArrayList<>();
+//		StringTokenizer multiTokenizer_full = new StringTokenizer(n.getData(),",");
+//		while (multiTokenizer_full.hasMoreTokens())
+//		{
+//			StringTokenizer multiTokenizer = new StringTokenizer(multiTokenizer_full.nextToken(),"_,");
+//			while (multiTokenizer.hasMoreTokens()) {
+//				String color = multiTokenizer.nextToken();
+//				int num = Integer.parseInt(multiTokenizer.nextToken());
+//				ans.add(new Piece(num,color));
+//			}
+//
+//		}
+//		int size = 0;
+//		for (int i = 0; i < this.board.getN(); i++) {
+//			for (int j = 0; j < this.board.getM(); j++) {
+//				this.board.getMatBoard()[i][j] = ans.get(size);
+//				size++;
+//			}
+//		}
+//
+//
+//
+//	}
+	
+	public Piece[][] MyinitMatrix(Node n, Piece[][] BoardPiece) {
 		ArrayList<Piece> ans = new ArrayList<>();
+		Piece[][] AnsBoard = new Piece[BoardPiece.length][BoardPiece[0].length];
 		StringTokenizer multiTokenizer_full = new StringTokenizer(n.getData(),",");
 		while (multiTokenizer_full.hasMoreTokens())
 		{
@@ -80,12 +122,13 @@ public class Algoritem {
 		int size = 0;
 		for (int i = 0; i < this.board.getN(); i++) {
 			for (int j = 0; j < this.board.getM(); j++) {
-				this.board.getMatBoard()[i][j] = ans.get(size);
+				AnsBoard[i][j] = ans.get(size);
+				AnsBoard[i][j].setPlace(i, j);
 				size++;
 			}
 		}
 
-
+		return AnsBoard;
 
 	}
 
@@ -96,44 +139,46 @@ public class Algoritem {
 	 * @param n node that we need to check he's chlids.
 	 * @return the node the the current state after doing operation, the data will be a string.
 	 */
-	public Node Operator(Node n,int index) {
-		int[] ijempty = this.board.findEmptyPiece();
+	public Node Operator(Node n,int index,Piece[][] matBoard) {
+		int[] ijempty = findEmptyPiece(matBoard); //fix
 		int i = ijempty[0];
 		int j = ijempty[1];
 
+
 		if (index == 3) {
-			if(Left(i,j)) {
-				Piece left_piece = this.board.getMatBoard()[i][j-1];
-				swap_pieces(i,j-1,i,j);
-				Node ans = new_node_state(left_piece,"L");
-				swap_pieces(i,j-1,i,j);
+			if(Right(i,j,matBoard)) {
+				Piece left_piece = matBoard[i][j-1];
+				swap_pieces(i,j-1,i,j,matBoard);
+				Node ans = new_node_state(left_piece,"L",matBoard);
+				swap_pieces(i,j-1,i,j,matBoard);
 				return ans;
 			}
 		}
 		else if(index == 4) {
-			if(Up(i,j)) {
-				Piece up_piece = this.board.getMatBoard()[i-1][j];
-				swap_pieces(i-1,j,i,j);
-				Node ans = new_node_state(up_piece,"U");
-				swap_pieces(i-1,j,i,j);
+			if(Down(i,j,matBoard)) {
+				Piece up_piece = matBoard[i-1][j];
+				swap_pieces(i-1,j,i,j,matBoard);
+				Node ans = new_node_state(up_piece,"U",matBoard);
+				swap_pieces(i-1,j,i,j,matBoard);
 				return ans;
 			}
 		}
 		else if(index == 1) {
-			if(Right(i,j)) {
-				Piece right_piece = this.board.getMatBoard()[i][j+1];
-				swap_pieces(i,j+1,i,j);
-				Node ans = new_node_state(right_piece,"R");
-				swap_pieces(i,j+1,i,j);
+			if(Left(i,j,matBoard)) {
+				Piece right_piece = matBoard[i][j+1];
+				swap_pieces(i,j+1,i,j,matBoard);
+				Node ans = new_node_state(right_piece,"R",matBoard);
+				swap_pieces(i,j+1,i,j,matBoard);
 				return ans;
 			}
 		}
 		else if(index == 2) {
-			if(Down(i,j)) {
-				Piece down_piece = this.board.getMatBoard()[i+1][j];
-				swap_pieces(i+1,j,i,j);
-				Node ans = new_node_state(down_piece,"D");
-				swap_pieces(i+1,j,i,j);
+			if(Up(i,j,matBoard)) {
+				Piece down_piece = matBoard[i+1][j];
+				swap_pieces(i+1,j,i,j,matBoard);
+				Node ans = new_node_state(down_piece,"D",matBoard);
+				swap_pieces(i+1,j,i,j,matBoard);
+				
 				return ans;
 			}
 		}
@@ -146,26 +191,26 @@ public class Algoritem {
 
 
 
-	public boolean Left(int i, int j){
-		if(j-1 >= 0 && !(this.board.getMatBoard()[i][j-1].getColor().equals("Black")))
+	public boolean Right(int i, int j,Piece[][] matPiece){
+		if(j-1 >= 0 && !(matPiece[i][j-1].getColor().equals("Black")))
 			return true;
 		return false;
 	}
 
-	public boolean Up(int i, int j){
-		if(i-1>= 0 && !(this.board.getMatBoard()[i-1][j].getColor().equals("Black")))
+	public boolean Down(int i, int j,Piece[][] matPiece){
+		if(i-1>= 0 && !(matPiece[i-1][j].getColor().equals("Black")))
 			return true;
 		return false;
 	}
 
-	public boolean Right(int i, int j){
-		if(j+1 <this.board.getM() && !(this.board.getMatBoard()[i][j+1].getColor().equals("Black")))
+	public boolean Left(int i, int j,Piece[][] matPiece){
+		if(j+1 <this.board.getM() && !(matPiece[i][j+1].getColor().equals("Black")))
 			return true;
 		return false;
 	}
 
-	public boolean Down(int i, int j){
-		if(i+1<this.board.getN() && !(this.board.getMatBoard()[i+1][j].getColor().equals("Black")))
+	public boolean Up(int i, int j,Piece[][] matPiece){
+		if(i+1<this.board.getN() && !(matPiece[i+1][j].getColor().equals("Black")))
 			return true;
 		return false;
 	}
@@ -175,12 +220,12 @@ public class Algoritem {
 	 * @param piece 
 	 * @param emptyPiece
 	 */
-	public void swap_pieces(int i , int j , int e_i , int e_j) {
-		Piece temp = this.board.getMatBoard()[i][j];
+	public void swap_pieces(int i , int j , int e_i , int e_j,Piece[][] matPiece) {
+		Piece temp = matPiece[i][j];
 
-		this.board.getMatBoard()[i][j] = this.board.getMatBoard()[e_i][e_j];
+		matPiece[i][j] = matPiece[e_i][e_j];
 
-		this.board.getMatBoard()[e_i][e_j] = temp;
+		matPiece[e_i][e_j] = temp;
 
 	}
 
@@ -192,25 +237,30 @@ public class Algoritem {
 	 * @param der - the deriaction from him L, U, R , D
 	 * @returnn ew_node_state
 	 */
-	private Node new_node_state(Piece piece, String der) {
-		String current_state = CreateState(); // create String of the current state
+	private Node new_node_state(Piece piece, String der,Piece[][] matPiece) {
+		String current_state = CreateState(matPiece); // create String of the current state
 		Node new_node = new Node(current_state);
 		switch (der) {
 		case "L":
 			new_node.path = piece.getNumber_Piece()+"R-";
 			new_node.noBack = 1;
+			new_node.price = piece.getPrice();
 			break;
 		case "U":
 			new_node.path = piece.getNumber_Piece()+"D-";
 			new_node.noBack = 2;
+			new_node.price = piece.getPrice();
 			break;
 		case "R":
 			new_node.path = piece.getNumber_Piece()+"L-";
 			new_node.noBack = 3;
+			new_node.price = piece.getPrice();
 			break;
 		case "D":
 			new_node.path = piece.getNumber_Piece()+"U-";
 			new_node.noBack = 4;
+			new_node.price = piece.getPrice();
+
 			break;
 		}
 		return new_node;
@@ -235,8 +285,39 @@ public class Algoritem {
 
 
 		}
-		System.out.println(finalAns);
 		return finalAns;
+	}
+	
+	public int[] findEmptyPiece(Piece[][] matBoard) {
+		int[] ans = new int[2];
+		
+		for (int i = 0; i < matBoard.length; i++) {
+			for (int j = 0; j < matBoard[0].length; j++) {
+				if (matBoard[i][j].getNumber_Piece() == -1) {
+					ans[0] = i;
+					ans[1] = j;
+					return ans;
+				}
+			}
+		}
+		return ans;
+	}
+	
+	public boolean Check_if_Solution(Node start, Node goal) {
+		Piece[][] startMat = MyinitMatrix(start, this.board.getMatBoard());
+		Piece[][] goalMat = MyinitMatrix(goal, this.board.getMatBoard());
+		
+		for (int i = 0; i < goalMat.length; i++) {
+			for (int j = 0; j < goalMat[0].length; j++) {
+				if((goalMat[i][j].getNumber_Piece() != startMat[i][j].getNumber_Piece())) {
+					if(startMat[i][j].getColor().equals("Black")) {
+						return false;
+					}
+				}
+			}
+		}
+		
+		return true;
 	}
 
 	public void countNum() {

@@ -16,7 +16,7 @@ public class BFS extends Algoritem{
 
 	public BFS(Board other_board, boolean time, boolean open)  {
 		super(other_board,time,open);
-		String S = CreateState();
+		String S = CreateState(this.board.getMatBoard());
 		Node start = new Node(S);
 		String G = CreateGoal();
 		Node goal = new Node(G);
@@ -38,13 +38,11 @@ public class BFS extends Algoritem{
 		if (isTime) {
 			this.startTime = System.nanoTime();
 		}
-		boolean valid_operation = true;
 		Open_list.put(start, start.getData()); // inset the Start Node to the Queue
 		Queue.add(start); // add the start to the Queue
 		// have close list
 
 		while (!Queue.isEmpty()) {		
-			valid_operation = true;
 
 			if(isOpen) {
 				Hashtable<Integer, Integer>	 h1 = (Hashtable<Integer, Integer>)Open_list.clone();
@@ -60,17 +58,12 @@ public class BFS extends Algoritem{
 					this.endTime   = System.nanoTime();
 					this.totalTime = endTime - startTime;
 					seconds = (double)totalTime / 1_000_000_000.0;
-					System.out.println(seconds);
-					System.out.println(getNum());
 					n.setPath(n.getPath().substring(0,n.getPath().length()-1));
-					//						System.out.println(n.getPath());
 				}
 				CreateFile cf = new CreateFile(n.getPath(), getNum(), isTime, cost,seconds);
 				return true;
 			}
-			else {
-				initMatrix(n);	
-			}
+			this.board.setMatBoard(MyinitMatrix(n,this.board.getMatBoard()));
 			this.myChlids = getChilds(n);
 			
 			for (Node g : this.myChlids) {
@@ -78,12 +71,9 @@ public class BFS extends Algoritem{
 					Open_list.put(g, g.getData());
 					g.setPath(n.getPath()+g.getPath());
 					Queue.add(g);
-
 				}
 			}
 			this.myChlids.clear();
-			//	System.out.println("Num="+num+"| path: "+n.getPath()+g.getPath()+" state:"+g.getData());
-
 		}	
 		CreateFile cf = new CreateFile(getNum());
 		return false;
@@ -91,7 +81,11 @@ public class BFS extends Algoritem{
 
 
 
-
+/**
+ * this function will return Queue with the chlid of the n node.
+ * @param n the node that we want to made chlids.
+ * @return queue with n chlids
+ */
 public Queue<Node> getChilds(Node n) {
 
 	for (int i = 1; i <= 5; i++) {
@@ -99,7 +93,7 @@ public Queue<Node> getChilds(Node n) {
 		if(temp.getNoBack() == i) {
 			continue;
 		}
-		Node g = Operator(temp,i);
+		Node g = Operator(temp,i,this.board.getMatBoard());
 		if(g == null) {
 			continue;
 		}

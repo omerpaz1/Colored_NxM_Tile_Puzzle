@@ -16,7 +16,6 @@ public class Board {
 	private int M; // size of Colums
 	private ArrayList<Piece> List_pieces;
 	private Hashtable<Integer,Integer> pieces_prices;
-
 	private Piece[][] MatBoard;
 	private Piece EmptyPiece;
 	
@@ -118,20 +117,6 @@ public class Board {
 		}
 	}
 	
-	public int[] findEmptyPiece() {
-		int[] ans = new int[2];
-		
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < M; j++) {
-				if (this.MatBoard[i][j].getNumber_Piece() == -1) {
-					ans[0] = i;
-					ans[1] = j;
-					return ans;
-				}
-			}
-		}
-		return ans;
-	}
 	
     public void printMat() 
     { 

@@ -18,16 +18,16 @@ public class Ex1
 			Algoritem BFS = new BFS(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());
 			break;
 		case "DFID":
-			Algoritem DFID = new Algoritem(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());
+			Algoritem DFID = new DFID(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());
 		break;
 		case "A*":
-			Algoritem AStar = new Algoritem(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());
+			Algoritem AStar = new AStar(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());
 		break;
 		case "IDA*":
-			Algoritem IDAStar = new Algoritem(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());
+			Algoritem IDAStar = new IDAStar(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());
 		break;
 		case "DFBnB":
-			Algoritem DFBnB = new Algoritem(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());
+			Algoritem DFBnB = new DFBnB(myGame.getMyBorad(),myGame.isTime(),myGame.isOpen());
 		break;
 
 		default:
