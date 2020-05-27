@@ -41,10 +41,9 @@ public class IDAStar extends Algoritem {
 			minF = Integer.MAX_VALUE;
 			myStack.push(start);
 			loopAvoidance.put(start,start.getData());
-
+			this.Num++;
 			while(!myStack.isEmpty()) {
 				Node n = myStack.pop();
-				this.Num++;
 				if(n.isOut()) {
 					loopAvoidance.remove(n);
 				}
@@ -55,6 +54,7 @@ public class IDAStar extends Algoritem {
 				this.board.setMatBoard(MyinitMatrix(n,this.board.getMatBoard()));
 				this.myChlids = getChilds(n);
 				for (Node g : myChlids) {
+					this.Num++;
 					g.setPath(n.getPath()+g.getPath());
 					set_F_of_N(g,goal);
 					if(g.getF() > tresh) {
@@ -67,24 +67,23 @@ public class IDAStar extends Algoritem {
 					if(loopAvoidance.contains(g.getData()) && (!g.isOut())) {
 						Node t = findNode(g);
 						if(t.getF() > g.getF()) {
-							// remove from stack
-							System.out.println("here");
-							// remove from loopavoidnace
+							int index = myStack.indexOf(t);
+							myStack.remove(index);
+							loopAvoidance.remove(t);
 						}
 						else {
 							continue;
 						}
 					}
 					if(g.getData().equals(goal.getData())) {
-						System.out.println("found!");
-						int cost = createPrice(g.getPath());
 						String nPath = g.getPath();
+						int cost = createPrice(nPath);
 						if(isTime) {
 							this.endTime   = System.nanoTime();
 							this.totalTime = endTime - startTime;
 							seconds = (double)totalTime / 1_000_000_000.0;
-							g.setPath(nPath.substring(0,nPath.length()-1));
 						}
+						g.setPath(nPath.substring(0,nPath.length()-1));
 						CreateFile cf = new CreateFile(g.getPath(), getNum(), isTime, cost,seconds);
 						return true;
 					}
@@ -105,65 +104,65 @@ public class IDAStar extends Algoritem {
 	return false;
 }
 
-public Node findNode(Node n) {
-	Enumeration enu = loopAvoidance.keys(); 
-	int i = 0;
-	while (enu.hasMoreElements()) { 
+	public Node findNode(Node n) {
+		Enumeration enu = loopAvoidance.keys(); 
+		int i = 0;
+		while (enu.hasMoreElements()) { 
 
-		Node temp =(Node) enu.nextElement(); 
-		if(temp.getData().equals(n.getData())) {
-			return temp;
-		}
-		i++;
-	} 
-	return n;
-}
+			Node temp =(Node) enu.nextElement(); 
+			if(temp.getData().equals(n.getData())) {
+				return temp;
+			}
+			i++;
+		} 
+		return n;
+	}
 
 
-private void set_F_of_N(Node n,Node goal) {
-	int h = ManhattanDis(n);
-	int g = createPrice(n.getPath());
-	// TODO Auto-generated method stub
-	n.setF(h+g);
+	private void set_F_of_N(Node n,Node goal) {
+		int h = ManhattanDis(n);
+		int g = createPrice(n.getPath());
+		// TODO Auto-generated method stub
+		n.setF(h+g);
 
-}
+	}
 
-public int ManhattanDis(Node start) {
-	int sumManattanDis = 0;
-	int[] goal_place = new int[2];
-	Piece[][] startMat = MyinitMatrix(start, this.board.getMatBoard());
-	Piece[][] goalMat = MyinitMatrix(goal, this.board.getMatBoard());
-	for (int i = 0; i < startMat.length; i++) {
-		for (int j = 0; j < startMat[0].length; j++) {
-			int StateNum = startMat[i][j].getNumber_Piece();
-			int GoalNum = goalMat[i][j].getNumber_Piece();
-			if(StateNum != GoalNum && StateNum != -1) {
-				Piece temp = GoalHash.get(StateNum); 
-				goal_place = temp.getPlace(); 
-				sumManattanDis+= (Math.abs(goal_place[0]-i)+Math.abs(goal_place[1]-j))*temp.getPrice();					
+	public int ManhattanDis(Node start) {
+		int sumManattanDis = 0;
+		int[] goal_place = new int[2];
+		Piece[][] startMat = MyinitMatrix(start, this.board.getMatBoard());
+		Piece[][] goalMat = MyinitMatrix(goal, this.board.getMatBoard());
+		for (int i = 0; i < startMat.length; i++) {
+			for (int j = 0; j < startMat[0].length; j++) {
+				int StateNum = startMat[i][j].getNumber_Piece();
+				int GoalNum = goalMat[i][j].getNumber_Piece();
+				if(StateNum != GoalNum && StateNum != -1) {
+					Piece temp = GoalHash.get(StateNum); 
+					goal_place = temp.getPlace(); 
+					sumManattanDis+= (Math.abs(goal_place[0]-i)+Math.abs(goal_place[1]-j))*temp.getPrice();					
+				}
 			}
 		}
+
+
+		return sumManattanDis;
 	}
 
+	public Queue<Node> getChilds(Node n) {
 
-	return sumManattanDis;
-}
-
-public Queue<Node> getChilds(Node n) {
-
-	for (int i = 1; i <= 5; i++) {
-		Node temp = new Node(n);
-		if(temp.getNoBack() == i) {
-			continue;
+		for (int i = 1; i <= 5; i++) {
+			Node temp = new Node(n);
+			if(temp.getNoBack() == i) {
+				continue;
+			}
+			Node g = Operator(temp,i,this.board.getMatBoard());
+			if(g == null) {
+				continue;
+			}
+			this.myChlids.add(g);
 		}
-		Node g = Operator(temp,i,this.board.getMatBoard());
-		if(g == null) {
-			continue;
-		}
-		this.myChlids.add(g);
+		return this.myChlids;
 	}
-	return this.myChlids;
-}
 
 
 }

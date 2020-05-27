@@ -41,7 +41,7 @@ public class AStar extends Algoritem {
 		Open_list.put(start,start.getData()); // inset the Start Node to the Queue
 		pQueue.add(start); // add the start to the Queue
 
-
+		this.Num++;
 		while (!pQueue.isEmpty()) {
 			if(isOpen) {
 				Hashtable<Node, String>	 h1 = (Hashtable<Node, String>)Open_list.clone();
@@ -50,7 +50,6 @@ public class AStar extends Algoritem {
 
 			Node n_f = pQueue.remove(); // get the front element of the queue
 			Close_list.put(n_f, n_f.getData());
-			this.Num++;
 			if(n_f.getData().equals(goal.getData())) { // its mean we in the goal 	
 				String nPath = n_f.getPath();
 				int cost = createPrice(nPath);
@@ -72,6 +71,7 @@ public class AStar extends Algoritem {
 					g.setPath(n_f.getPath()+g.getPath());
 					set_F_of_N(g,goal);
 					pQueue.add(g);
+					this.Num++;
 				}
 				else if(Open_list.contains(g.getData())) {
 					Node temp = findNode(g);
