@@ -1,4 +1,4 @@
 8R-11D-7L-8U
 Num: 9
 Cost: 33
-0.0036026 seconds
+0.0016381 seconds

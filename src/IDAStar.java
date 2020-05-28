@@ -49,60 +49,67 @@ public class IDAStar extends Algoritem {
 				}
 				else {
 					n.setOut(true);
-     					myStack.push(n);
-				}
-				this.board.setMatBoard(MyinitMatrix(n,this.board.getMatBoard()));
-				this.myChlids = getChilds(n);
-				for (Node g : myChlids) {
-					this.Num++;
-					g.setPath(n.getPath()+g.getPath());
-					set_F_of_N(g,goal);
-					if(g.getF() > tresh) {
-						minF = Math.min(g.getF(), minF);
-						continue;
-					}
-					if(loopAvoidance.contains(g.getData()) && g.isOut()) {
-						continue;
-					}
-					if(loopAvoidance.contains(g.getData()) && (!g.isOut())) {
-						Node t = findNode(g);
-						if(t.getF() > g.getF()) {
-							int index = myStack.indexOf(t);
-							myStack.remove(index);
-							loopAvoidance.remove(t);
-						}
-						else {
+					myStack.push(n);
+
+					this.board.setMatBoard(MyinitMatrix(n,this.board.getMatBoard()));
+//					this.myChlids = getChilds(n);
+					for (int i = 1; i <= 5; i++) {
+						Node temp = new Node(n);
+						if(temp.getNoBack() == i) {
 							continue;
 						}
-					}
-					if(g.getData().equals(goal.getData())) {
-						String nPath = g.getPath();
-						int cost = createPrice(nPath);
-						if(isTime) {
-							this.endTime   = System.nanoTime();
-							this.totalTime = endTime - startTime;
-							seconds = (double)totalTime / 1_000_000_000.0;
+						Node g = Operator(temp,i,this.board.getMatBoard());
+						if(g == null) {
+							continue;
 						}
-						g.setPath(nPath.substring(0,nPath.length()-1));
-						CreateFile cf = new CreateFile(g.getPath(), getNum(), isTime, cost,seconds);
-						return true;
-					}
-					else {
-						myStack.push(g);
-						loopAvoidance.put(g, g.getData());
+						this.Num++;
+						g.setPath(n.getPath()+g.getPath());
+						set_F_of_N(g,goal);
+						if(g.getF() > tresh) {
+							minF = Math.min(g.getF(), minF);
+							continue;
+						}
+						if(loopAvoidance.contains(g.getData()) && g.isOut()) {
+							continue;
+						}
+						if(loopAvoidance.contains(g.getData()) && (!g.isOut())) {
+							Node t = findNode(g);
+							if(t.getF() > g.getF()) {
+								int index = myStack.indexOf(t);
+								myStack.remove(index);
+								loopAvoidance.remove(t);
+							}
+							else {
+								continue;
+							}
+						}
+						if(g.getData().equals(goal.getData())) {
+							String nPath = g.getPath();
+							int cost = createPrice(nPath);
+							if(isTime) {
+								this.endTime   = System.nanoTime();
+								this.totalTime = endTime - startTime;
+								seconds = (double)totalTime / 1_000_000_000.0;
+							}
+							g.setPath(nPath.substring(0,nPath.length()-1));
+							CreateFile cf = new CreateFile(g.getPath(), getNum(), isTime, cost,seconds);
+							return true;
+						}
+						else {
+							myStack.push(g);
+							loopAvoidance.put(g, g.getData());
+						}
 					}
 
+				}
 			}
-			this.myChlids.clear();
-
+			tresh = minF;
+			start.setOut(false);
 		}
-		tresh = minF;
 
+
+		return false;
 	}
-
-
-	return false;
-}
 
 	public Node findNode(Node n) {
 		Enumeration enu = loopAvoidance.keys(); 
