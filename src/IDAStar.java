@@ -36,12 +36,12 @@ public class IDAStar extends Algoritem {
 		}
 
 		int tresh = ManhattanDis(start);
+		this.Num++;
 
 		while(tresh != Integer.MAX_VALUE) {
 			minF = Integer.MAX_VALUE;
 			myStack.push(start);
 			loopAvoidance.put(start,start.getData());
-			this.Num++;
 			while(!myStack.isEmpty()) {
 				Node n = myStack.pop();
 				if(n.isOut()) {
@@ -107,7 +107,7 @@ public class IDAStar extends Algoritem {
 			start.setOut(false);
 		}
 
-
+		CreateFile cf = new CreateFile(getNum());
 		return false;
 	}
 

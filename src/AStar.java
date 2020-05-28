@@ -63,8 +63,7 @@ public class AStar extends Algoritem {
 				return true;
 			}
 			this.board.setMatBoard(MyinitMatrix(n_f,this.board.getMatBoard()));
-			this.myChlids = getChilds(n_f);
-
+			getChilds(n_f);
 			for (Node g : this.myChlids) {
 				if (!(Close_list.contains(g.getData()))){
 					Open_list.put(g,g.getData());
@@ -80,7 +79,7 @@ public class AStar extends Algoritem {
 					if(t_price > g_price) {
 						Open_list.remove(temp);
 						Open_list.put(g,g.getData());
-						set_F_of_N(g,goal);
+//						set_F_of_N(g,goal);
 					}
 				}
 
@@ -111,7 +110,7 @@ public class AStar extends Algoritem {
 		start.setF(h+g);
 
 	}
-	public Queue<Node> getChilds(Node n) {
+	public void getChilds(Node n) {
 
 		for (int i = 1; i <= 5; i++) {
 			Node temp = new Node(n);
@@ -124,7 +123,6 @@ public class AStar extends Algoritem {
 			}
 			this.myChlids.add(g);
 		}
-		return this.myChlids;
 	}
 
 	public int ManhattanDis(Node start) {
