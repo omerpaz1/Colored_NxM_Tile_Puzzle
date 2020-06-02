@@ -52,7 +52,6 @@ public class IDAStar extends Algoritem {
 					myStack.push(n);
 
 					this.board.setMatBoard(MyinitMatrix(n,this.board.getMatBoard()));
-//					this.myChlids = getChilds(n);
 					for (int i = 1; i <= 5; i++) {
 						Node temp = new Node(n);
 						if(temp.getNoBack() == i) {
@@ -65,6 +64,7 @@ public class IDAStar extends Algoritem {
 						this.Num++;
 						g.setPath(n.getPath()+g.getPath());
 						set_F_of_N(g,goal);
+						System.out.println(g.getData());
 						if(g.getF() > tresh) {
 							minF = Math.min(g.getF(), minF);
 							continue;

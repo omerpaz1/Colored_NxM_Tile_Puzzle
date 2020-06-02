@@ -69,6 +69,10 @@ public class DFBnB extends Algoritem{
 					}
 					else if(loopAvoidance.contains(g.getData()) && !(g.isOut())) {
 						Node t = findNode(g);
+//						System.out.println("t.getF() = "+t.getF());
+//						System.out.println("g.getF() = "+g.getF());
+//						System.out.println("t.getF() <= g.getF() ?"+(t.getF() <= g.getF()));
+//						System.out.println("thresh = "+thresh);
 						if(t.getF() <= g.getF()) {
 							continue;
 						}
@@ -79,15 +83,9 @@ public class DFBnB extends Algoritem{
 						}
 					}
 					else if(g.getData().equals(goal.getData())) {
-						System.out.println("Mid Ans found!");
 						result = g.getPath();
 						thresh = g.getF();
 						PQmyChlids.clear();
-						System.out.println("path = "+result);
-						System.out.println("Num = "+getNum());
-						System.out.println("cost = "+createPrice(result));
-						System.out.println("g.getF was = "+g.getF());
-						System.out.println("now tresh = "+thresh);
 						break;
 						
 					}

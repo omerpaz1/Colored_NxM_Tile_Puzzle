@@ -31,7 +31,6 @@ public class DFID extends Algoritem{
 		}
 		
 		for (int depth = 1; depth < 1000; depth++) {
-			System.out.println("limit = "+depth);
 			this.loopAvoidance = new Hashtable<Node, String>(); 
 			Node result = Limited_DFS(start,goal,depth,this.loopAvoidance,theBoard.getMatBoard(),"");
 			if (!result.isCutoff()) {
@@ -41,12 +40,7 @@ public class DFID extends Algoritem{
 						this.endTime   = System.nanoTime();
 						this.totalTime = endTime - startTime;
 						seconds = (double)totalTime / 1_000_000_000.0;
-						result.setPath(result.getPath().substring(0,result.getPath().length()-1));
-						System.out.println(result.getPath());
-						System.out.println(cost);
-						System.out.println(seconds);
-						System.out.println(getNum());
-						
+						result.setPath(result.getPath().substring(0,result.getPath().length()-1));	
 					}
 					CreateFile cf = new CreateFile(result.getPath(), getNum(), isTime, cost,seconds);
 					return true;
@@ -60,8 +54,6 @@ public class DFID extends Algoritem{
 
 	private Node Limited_DFS(Node n, Node goal, int limit, Hashtable<Node, String> loopAvoidance,Piece[][] matBoard,String path) {
 		path+=n.getPath();
-		System.out.println( path);
-
 		if(n.getData().equals(goal.getData())) {
 			this.Num++;
 			n.setPath(path);
@@ -140,15 +132,6 @@ public class DFID extends Algoritem{
 
 	}
 	
-	public void printMat(Piece[][] mat) {
-		for (int i = 0; i < mat.length; i++) {
-			for (int j = 0; j < mat[0].length; j++) {
-				System.out.print(mat[i][j].getNumber_Piece()+" ");
-			}
-			System.out.println();
-		}
-		
-	}
 
 
 }
